@@ -5,6 +5,7 @@ const Customer = require("../../Models/Users/Customer");
 const vietnamTimeZone = "Asia/Ho_Chi_Minh";
 
 class AppointmentController {
+  
   async getAppointmentsByEmployeeId(req, res) {
     const { id } = req.params; // Lấy id_employee từ tham số URL
 

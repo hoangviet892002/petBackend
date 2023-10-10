@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('./database');
 const cors = require('cors');
 
-
+const swaggerDocs = require('./utils/swagger');
 const route = require('./routes');
 
 const app = express();
@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 route(app);
 
-
+swaggerDocs(app);
 const port = process.env.PORT || 2000;
 app.listen(port, () => {
   console.log(`Server đang lắng nghe trên cổng ${port}`);

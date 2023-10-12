@@ -12,6 +12,10 @@ const Appointment = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     customer_id: {
       type: DataTypes.INTEGER,
       allowNull: true, // Khách hàng có thể là null

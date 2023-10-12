@@ -29,6 +29,7 @@ class AppointmentController {
             id: appointment.id,
             start: moment(appointment.start).format("YYYY-MM-DDTHH:mm:ss"),
             end: moment(appointment.end).format("YYYY-MM-DDTHH:mm:ss"),
+            status : appointment.status,
             title: customer ? customer.name : "mắc ziệc",
           };
         })

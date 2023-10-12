@@ -44,10 +44,9 @@ class AppointmentController {
   }
   async checkSlot(req, res) {
     const { start, end, id_employee } = req.body;
-    const startInVietnamTimeZone  = moment(start).tz(vietnamTimeZone);
-    const endInVietnamTimeZone  = moment(end).tz(vietnamTimeZone);
-    console.log(start);
-
+    const startInVietnamTimeZone = moment(start).tz(vietnamTimeZone);
+    const endInVietnamTimeZone = moment(end).tz(vietnamTimeZone);
+  
     try {
       // Perform an overlap check using Sequelize
       const overlappingAppointments = await Appointment.findAll({
@@ -59,53 +58,45 @@ class AppointmentController {
                 [Op.lte]: endInVietnamTimeZone,
               },
               end: {
-                [Op.gte]: endInVietnamTimeZone,
-              },
-            },
-            {
-              start: {
-                [Op.lte]: startInVietnamTimeZone,
-              },
-              end: {
                 [Op.gte]: startInVietnamTimeZone,
-              },
-            },
-            {
-              start: {
-                [Op.gte]: startInVietnamTimeZone,
-              },
-              start: {
-                [Op.lte]: endInVietnamTimeZone,
               },
             },
           ],
         },
       });
-
+  
       if (overlappingAppointments.length > 0) {
-        return res
-          .status(200)
-          .json({
-            success: false,
-            message:
-              "Giờ có người đặt rồi bé",
-          });
-      }
-
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message:
-            "Slot is available and appointment is scheduled successfully.",
+        return res.status(200).json({
+          success: false,
+          message: "Giờ đã có người đặt rồi.",
         });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: "Slot is available, and the appointment is scheduled successfully.",
+      });
     } catch (error) {
       console.error(error);
-      return res
-        .status(200)
-        .json({ success: false, message: "Internal server error" });
+      return res.status(500).json({ success: false, message: "Internal server error" });
     }
   }
+  async add(req, res){
+    const { start, end, employee_id } = req.body;
+    try{
+      const newAppointment = await Appointment.create({
+        start,
+        end,
+        employee_id,
+        customer_id: 1,
+        status: 1,
+      });
+      return res.status(200).json({ success: true, message: "Appointment created successfully" });
+    }catch{
+      return res.status(200).json({ success: false, message: "Internal server error" });
+    }
+  }
+  
 }
 
 module.exports = new AppointmentController();

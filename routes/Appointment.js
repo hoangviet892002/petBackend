@@ -92,5 +92,6 @@ router.get('/getByEmployeeId/:id', AppointmentControllers.getAppointmentsByEmplo
  *         description: The appointment slot is already booked.
  */
 router.post('/checkslot', AppointmentControllers.checkSlot);
+router.post('/add', AppointmentControllers.add )
 
 module.exports = router;

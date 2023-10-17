@@ -54,10 +54,10 @@ class AppointmentController {
           [Op.or]: [
             {
               start: {
-                [Op.lte]: startInVietnamTimeZone,
+                [Op.gte]: startInVietnamTimeZone,
               },
               end: {
-                [Op.gte]: endInVietnamTimeZone,
+                [Op.lte]: endInVietnamTimeZone,
               },
             },
           ],

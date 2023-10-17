@@ -5,7 +5,6 @@ const Customer = require("../../Models/Users/Customer");
 const vietnamTimeZone = "Asia/Ho_Chi_Minh";
 
 class AppointmentController {
-  
   async getAppointmentsByEmployeeId(req, res) {
     const { id } = req.params; // Lấy id_employee từ tham số URL
 
@@ -29,7 +28,7 @@ class AppointmentController {
             id: appointment.id,
             start: moment(appointment.start).format("YYYY-MM-DDTHH:mm:ss"),
             end: moment(appointment.end).format("YYYY-MM-DDTHH:mm:ss"),
-            status : appointment.status,
+            status: appointment.status,
             title: customer ? customer.name : "mắc ziệc",
           };
         })
@@ -46,7 +45,7 @@ class AppointmentController {
     const { start, end, id_employee } = req.body;
     const startInVietnamTimeZone = moment(start).tz(vietnamTimeZone);
     const endInVietnamTimeZone = moment(end).tz(vietnamTimeZone);
-  
+
     try {
       // Perform an overlap check using Sequelize
       const overlappingAppointments = await Appointment.findAll({
@@ -64,39 +63,55 @@ class AppointmentController {
           ],
         },
       });
-  
+
       if (overlappingAppointments.length > 0) {
         return res.status(200).json({
           success: false,
           message: "Giờ đã có người đặt rồi.",
         });
       }
-  
+
       return res.status(200).json({
         success: true,
-        message: "Slot is available, and the appointment is scheduled successfully.",
+        message:
+          "Slot is available, and the appointment is scheduled successfully.",
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ success: false, message: "Internal server error" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
     }
   }
-  async add(req, res){
+  async add(req, res) {
     const { start, end, employee_id } = req.body;
-    try{
+
+    // Assuming start and end are in a different time zone
+    const startInDifferentTimeZone = moment(start);
+    const endInDifferentTimeZone = moment(end);
+
+    // Convert to Vietnam time zone
+    const startInVietnamTimeZone = startInDifferentTimeZone.tz(vietnamTimeZone).add(7, 'hours').format("YYYY-MM-DDTHH:mm:ss");
+    const endInVietnamTimeZone = endInDifferentTimeZone.tz(vietnamTimeZone).add(7, 'hours').format("YYYY-MM-DDTHH:mm:ss");
+    console.log(startInVietnamTimeZone)
+    console.log(endInVietnamTimeZone)
+    try {
       const newAppointment = await Appointment.create({
-        start,
-        end,
+        start: startInVietnamTimeZone,
+        end: endInVietnamTimeZone,
         employee_id,
         customer_id: 1,
         status: 1,
       });
-      return res.status(200).json({ success: true, message: "Appointment created successfully" });
-    }catch{
-      return res.status(200).json({ success: false, message: "Internal server error" });
+      return res
+        .status(200)
+        .json({ success: true, message: "Appointment created successfully" });
+    } catch {
+      return res
+        .status(200)
+        .json({ success: false, message: "Internal server error" });
     }
   }
-  
 }
 
 module.exports = new AppointmentController();

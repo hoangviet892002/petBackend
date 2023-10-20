@@ -73,7 +73,7 @@ class AppointmentController {
       const today = moment().startOf('day'); // Lấy thời gian bắt đầu của ngày hôm nay
       const appointmentCount = await Appointment.count({
         where: {
-          employee_id: id_employee,
+          customer_id: 1,
           createdAt: {
             [Op.gte]: today,
           },

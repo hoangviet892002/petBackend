@@ -80,12 +80,12 @@ class AppointmentController {
         },
       });
   
-      if (appointmentCount > 2) {
-        return res.status(200).json({
-          success: false,
-          message: "Spam chi z bé, đợi mai nhá.",
-        });
-      }
+      // if (appointmentCount > 2) {
+      //   return res.status(200).json({
+      //     success: false,
+      //     message: "Spam chi z bé, đợi mai nhá.",
+      //   });
+      // }
 
       return res.status(200).json({
         success: true,

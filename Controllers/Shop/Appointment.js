@@ -109,10 +109,10 @@ class AppointmentController {
     // Convert to Vietnam time zone
     const startInVietnamTimeZone = startInDifferentTimeZone
       .tz(vietnamTimeZone)
-      .format("YYYY-MM-DDTHH:mm:ss");
+      .format("YYYY-MM-DDTHH:mm");
     const endInVietnamTimeZone = endInDifferentTimeZone
       .tz(vietnamTimeZone)
-      .format("YYYY-MM-DDTHH:mm:ss");
+      .format("YYYY-MM-DDTHH:mm");
     console.log(startInVietnamTimeZone);
     console.log(endInVietnamTimeZone);
     try {

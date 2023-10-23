@@ -54,10 +54,10 @@ class AppointmentController {
           [Op.or]: [
             {
               start: {
-                [Op.gte]: startInVietnamTimeZone,
+                [Op.gte]: startInVietnamTimeZone.subtract(15, "minutes"),
               },
               end: {
-                [Op.lte]: endInVietnamTimeZone,
+                [Op.lte]: endInVietnamTimeZone.add(15, "minutes"),
               },
             },
           ],
@@ -108,10 +108,10 @@ class AppointmentController {
 
     // Convert to Vietnam time zone
     const startInVietnamTimeZone = startInDifferentTimeZone
-      .tz(vietnamTimeZone).subtract(15, "minutes")
+      .tz(vietnamTimeZone)
       .format("YYYY-MM-DDTHH:mm");
     const endInVietnamTimeZone = endInDifferentTimeZone
-      .tz(vietnamTimeZone).add(15, "minutes")
+      .tz(vietnamTimeZone)
       .format("YYYY-MM-DDTHH:mm");
     console.log(startInVietnamTimeZone);
     console.log(endInVietnamTimeZone);

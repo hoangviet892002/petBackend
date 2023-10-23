@@ -93,5 +93,6 @@ router.get('/getByEmployeeId/:id', AppointmentControllers.getAppointmentsByEmplo
  */
 router.post('/checkslot', AppointmentControllers.checkSlot);
 router.post('/add', AppointmentControllers.add )
+router.get("/getByCustomer/:id", AppointmentControllers.ByCustomer);
 
 module.exports = router;

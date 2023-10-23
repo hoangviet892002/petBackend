@@ -70,7 +70,7 @@ class AppointmentController {
           message: "Giờ đã có người đặt rồi.",
         });
       }
-      const today = moment().startOf('day'); // Lấy thời gian bắt đầu của ngày hôm nay
+      const today = moment().startOf("day"); // Lấy thời gian bắt đầu của ngày hôm nay
       const appointmentCount = await Appointment.count({
         where: {
           customer_id: 1,
@@ -79,7 +79,7 @@ class AppointmentController {
           },
         },
       });
-  
+
       // if (appointmentCount > 2) {
       //   return res.status(200).json({
       //     success: false,
@@ -107,10 +107,14 @@ class AppointmentController {
     const endInDifferentTimeZone = moment(end);
 
     // Convert to Vietnam time zone
-    const startInVietnamTimeZone = startInDifferentTimeZone.tz(vietnamTimeZone).add(7, 'hours').format("YYYY-MM-DDTHH:mm:ss");
-    const endInVietnamTimeZone = endInDifferentTimeZone.tz(vietnamTimeZone).add(7, 'hours').format("YYYY-MM-DDTHH:mm:ss");
-    console.log(startInVietnamTimeZone)
-    console.log(endInVietnamTimeZone)
+    const startInVietnamTimeZone = startInDifferentTimeZone
+      .tz(vietnamTimeZone)
+      .format("YYYY-MM-DDTHH:mm:ss");
+    const endInVietnamTimeZone = endInDifferentTimeZone
+      .tz(vietnamTimeZone)
+      .format("YYYY-MM-DDTHH:mm:ss");
+    console.log(startInVietnamTimeZone);
+    console.log(endInVietnamTimeZone);
     try {
       const newAppointment = await Appointment.create({
         start: startInVietnamTimeZone,
@@ -126,6 +130,25 @@ class AppointmentController {
       return res
         .status(200)
         .json({ success: false, message: "Internal server error" });
+    }
+  }
+  async ByCustomer(req, res) {
+    try {
+      const customerId = req.params.id; 
+
+      // Sử dụng model Appointment để tìm các cuộc hẹn dựa trên thông tin của khách hàng
+      const appointments = await Appointment.findAll({ customer_id: customerId });
+
+      // Trả về kết quả dưới dạng JSON
+      res.json(appointments);
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: "Có lỗi xảy ra khi lấy danh sách cuộc hẹn của khách hàng.",
+        });
     }
   }
 }
